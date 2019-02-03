@@ -7,19 +7,8 @@
 #include "rngs.h"
 #include "unittestFxn.h"
 
-/*
-int passFail(int allPassed){
-	if(allPassed){
-		printf("All tests passed for whoseTurn Fxn\n" ); 
-		return 1; 
-	} else {
-		printf("Test FAILED for whoseTurn Fxn\n"); 
-		return 0; 
-	}
-}*/
-
 int main(){
-int ii,jj, allPassed, count; 
+int ii,jj,kk,ll, allPassed, gameOver, result; 
 
   allPassed = 1; 
 //  int k[10] = {adventurer, council_room, feast, gardens, mine,
@@ -28,18 +17,52 @@ int ii,jj, allPassed, count;
   struct gameState G;
 
 
-	//Tests for player 1 hand count
+	//Tests for if isGameOver fxn works correctly
+	//Game is over cases
+
+	//Provinces are empty
 	for(ii = 0; ii < treasure_map+1; ii++){
-		for(jj = -50; jj < MAX_DECK + 50; jj++){
-			G.supplyCount[ii] = jj; 
-			count = supplyCount(ii, &G);
-	
-			if(!assertFxn(jj, count)){
-				allPassed = 0; 
-			}
+		G.supplyCount[ii] = 10; 
+	}
+	G.supplyCount[province] = 0; 
+	gameOver = isGameOver(&G);
+	if(!assertFxn(gameOver, 1)){
+		allPassed = 0; 
+		printf("isGameOver fxn test failed w/ provinces set to 0\n"); 
+	}
+
+	//3 supplies are empty
+	for(ii = 0; ii < treasure_map+1; ii++){
+
+		for(kk = ii; kk < treasure_map+1; kk++){
+			for(ll = kk; ll < treasure_map+1; ll++){
+				//Set every supply back to 1 to run again
+				for(jj = 0; jj < treasure_map+1; jj++){
+					G.supplyCount[jj] = 1; 
+				}
+				G.supplyCount[ii] = 0; 
+				G.supplyCount[kk] = 0; 
+				G.supplyCount[ll] = 0; 
+				gameOver = isGameOver(&G);
+				result  = !((ii == kk) || (ll == kk)) || (ii==province) || (kk==province) || (ll==province) ;
+				if(!assertFxn(gameOver, result)){
+					allPassed = 0; 
+					printf("isGameOver fxn test failed w/ supplies %i, %i, %i set empty. Expected result of %i got %i\n", ii, kk, ll, result, gameOver); 
+				}
+			}	
 		}
 	}
-	char fxnName[] = {"supplyCount"};
+	
+	//Game is not over
+	//All supplies have 1 in them
+	for(jj = 0; jj < treasure_map+1; jj++){
+		G.supplyCount[jj] = 1; 
+	}
+	gameOver = isGameOver(&G);
+	if(!assertFxn(gameOver, 0)){
+		allPassed = 0; 
+	}
+	char fxnName[] = {"isGameOver"};
 	passFail(allPassed, fxnName); 
 }
 
@@ -82,4 +105,33 @@ int ii,jj, allPassed, count;
    treasure_map
   };
 */
+/*
+int isGameOver(struct gameState *state) {
+  int i;
+  int j;
+	
+  //if stack of Province cards is empty, the game ends
+  if (state->supplyCount[province] == 0)
+    {
+      return 1;
+    }
+
+  //if three supply pile are at 0, the game ends
+  j = 0;
+  for (i = 0; i < 25; i++)
+    {
+      if (state->supplyCount[i] == 0)
+	{
+	  j++;
+	}
+    }
+  if ( j >= 3)
+    {
+      return 1;
+    }
+
+  return 0;
+}
+*/
+
 
