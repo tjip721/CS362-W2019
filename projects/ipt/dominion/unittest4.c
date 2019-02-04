@@ -61,6 +61,7 @@ int ii,jj,kk,ll, allPassed, gameOver, result;
 	gameOver = isGameOver(&G);
 	if(!assertFxn(gameOver, 0)){
 		allPassed = 0; 
+		printf("isGameOver fxn test failed w/ 1 in all supplies.\n"); 
 	}
 	char fxnName[] = {"isGameOver"};
 	passFail(allPassed, fxnName); 
