@@ -16,7 +16,7 @@ char *inputString()
     char *sval = (char *) malloc(6*sizeof(char)); 
     int ii = 0; 
 	for(ii = 0; ii < 5; ii++){
-		sval[ii] = rand() % 128; 
+		sval[ii] = 97+ rand() % 26; 
 	}
     sval[5] = '\0'; 
     return sval;
@@ -53,7 +53,6 @@ void testme()
       exit(200);
     }
   }
-  free(s); 
 }
 
 
