@@ -38,6 +38,7 @@ allPassed = 1;
 	}
 	} */
 
+	printf("\n"); 
 }
 /*
  *enum CARD

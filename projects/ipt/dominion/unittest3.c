@@ -73,6 +73,7 @@ int jj,kk,ll,ii, allPassed, deckCount, player, card;
 	}
 	char fxnName[] = {"fullDeckCount"};
 	passFail(allPassed, fxnName); 
+	printf("\n"); 
 }
 
 

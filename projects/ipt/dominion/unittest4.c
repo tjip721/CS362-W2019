@@ -65,6 +65,7 @@ int ii,jj,kk,ll, allPassed, gameOver, result;
 	}
 	char fxnName[] = {"isGameOver"};
 	passFail(allPassed, fxnName); 
+	printf("\n"); 
 }
 
 

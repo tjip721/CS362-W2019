@@ -11,83 +11,90 @@ int main(){
   int allPassed = 1; 
 
   int k[10] = {adventurer, council_room, feast, gardens, mine,
-	       remodel, smithy, village, baron, great_hall};
+	       remodel, outpost, village, baron, great_hall};
 
   struct gameState G;
 
   initializeGame(2, k, 30, &G);
 
-	printf("Starting smithyFxn test\n");
+	printf("Starting outpostFxn test\n");
 //int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState *state, int handPos, int *bonus)
 //int playCard(int handPos, int choice1, int choice2, int choice3, struct gameState *state) 
 
-	G.hand[0][0] = smithy; //Put smithy into hand at position 0
+	G.hand[0][0] = outpost; //Put outpost into hand at position 0
 	G.whoseTurn = 0; 
+	int player = G.whoseTurn; 
 	handCount= G.handCount[G.whoseTurn]; 
 	int deckCount = G.deckCount[G.whoseTurn];
 	int playedCount= G.playedCardCount; 
+	int discardCount = G.discardCount[player];
 	int opp = (G.whoseTurn+1)%2; 
 	int oppHandCount = G.handCount[opp]; 
 	int oppDeckCount = G.deckCount[opp] ; 
 	int oppDiscardCount = G.discardCount[opp]; 
 	int supplyCounts[treasure_map+1]; 
+	int outposts = G.outpostPlayed; 
 	for(ii=0; ii < treasure_map+1; ii++){
 		supplyCounts[ii] = G.supplyCount[ii]; 
 	}
         playCard(0, -1, -1, -1, &G);
-	//Check if 3 cards were added to hand and smithy was discarded
-	if(!assertFxn(handCount+2, G.handCount[G.whoseTurn])){ 
+	//Check outposts are incremented
+	if(!assertFxn(outposts, G.outpostPlayed)){ 
 		allPassed = 0; 
-		addedCards = G.handCount[G.whoseTurn] - handCount; 
-		printf("%i cards were added to the players hand instead of net 2 by Smithy card fxn.\n",addedCards); 
+		addedCards = G.outpostPlayed - outposts; 
+		printf("%i were added to the outposts played 1 by the outpost card.\n",addedCards); 
 	}
-	if(!assertFxn(playedCount+1, G.playedCardCount)){ 
+	if(!assertFxn(discardCount, G.discardCount[player])){ 
 		allPassed = 0; 
-		printf("More or less than just the smithy card was discarded from the players hand. Expected = %i, actual = %i\n", playedCount+1, G.playedCardCount); 
+		printf("More or less than just the outpost card was discarded from the players hand. Expected = %i, actual = %i\n", discardCount, G.discardCount[player]); 
 	}
-	//Check that 3 cards were removed from players deck and none from other players
-	if(!assertFxn(deckCount-3,G.deckCount[G.whoseTurn]) ){
-		allPassed = 0; 
-		printf("Players deck did not have exactly 3 cards removed by Smithy card fxn.\n"); 
-	}
+	
 	if(!assertFxn(oppDeckCount, G.deckCount[(G.whoseTurn+1)%2] )){
 		allPassed = 0; 
-		printf("Other players deck was altered by Smithy card fxn.\n"); 
+		printf("Other players deck was altered by outpost card fxn.\n"); 
 	}
 	//Check for no state change in other players. 
 	if(!assertFxn(oppHandCount, G.handCount[opp] )){
 		allPassed = 0; 
-		printf("Other players hand was altered by Smithy card fxn.\n"); 
+		printf("Other players hand was altered by outpost card fxn.\n"); 
 	}
 	if(!assertFxn(oppDiscardCount, G.discardCount[opp] )){
 		allPassed = 0; 
-		printf("Other players discard pile was altered by Smithy card fxn.\n"); 
+		printf("Other players discard pile was altered by outpost card fxn.\n"); 
 	}
 	//Check for no state change in victory card piles and kingdom card piles
 	for(ii=0; ii < treasure_map+1; ii++){
 	if(!assertFxn(supplyCounts[ii], G.supplyCount[ii] )){
 		allPassed = 0; 
-		printf("Supply count %i was altered by Smithy card fxn.\n", ii); 
+		printf("Supply count %i was altered by outpost card fxn.\n", ii); 
 	}
 	}
-	char fxnName[] = {"Smithy Card"};
-	passFail(allPassed, fxnName); 
 
+	//Check that next turn same player gets turn and hand only contains 3 cards
+	endTurn(&G); 
+	if(!assertFxn(player, G.whoseTurn ) ){
+		allPassed = 0; 
+		printf("Outpost did not give player a second turn.\n"); 
+	}
+	if(!assertFxn(3, G.handCount[player]) ){
+		allPassed = 0; 
+		printf("Outpost did not give player a 3 card hand.\n"); 
+	}
+
+	char fxnName[] = {"outpost Card"};
+	passFail(allPassed, fxnName); 
 	printf("\n"); 
 }
 
-/*int smithyFxn(int handPos, int currentPlayer, struct gameState *state) {
-	//+3 Cards
-      int i=0; 
-      for (i = 0; i <= 3; i++) //Assignment 2 BUG, should be < 3; 
-	{
-	  drawCard(currentPlayer, state);
-	}
+/*int outpostFxn(struct gameState *state, int currentPlayer, int handPos){
+      //set outpost flag
+      state->outpostPlayed++;
 			
-      //discard card from hand
-      discardCard(handPos, currentPlayer, state, 0);
+      //discard card
+      discardCard(handPos, currentPlayer, state, 1); //Assignment 2 BUG, trashflag = 0
       return 0;
 }
+	
 struct gameState {
   int numPlayers; //number of players
   int supplyCount[treasure_map+1];  //this is the amount of a specific type of card given a specific number.

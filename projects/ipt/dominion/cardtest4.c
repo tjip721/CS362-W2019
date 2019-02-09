@@ -11,83 +11,99 @@ int main(){
   int allPassed = 1; 
 
   int k[10] = {adventurer, council_room, feast, gardens, mine,
-	       remodel, smithy, village, baron, great_hall};
+	       remodel, village, village, baron, great_hall};
 
   struct gameState G;
 
   initializeGame(2, k, 30, &G);
 
-	printf("Starting smithyFxn test\n");
+	printf("Starting village card test\n");
 //int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState *state, int handPos, int *bonus)
 //int playCard(int handPos, int choice1, int choice2, int choice3, struct gameState *state) 
 
-	G.hand[0][0] = smithy; //Put smithy into hand at position 0
+	G.hand[0][0] = village; //Put village into hand at position 0
 	G.whoseTurn = 0; 
+	int player= G.whoseTurn; 
+	G.numActions = 1; 
+  	G.playedCardCount = 0;
+	G.discardCount[player] = 0; 
 	handCount= G.handCount[G.whoseTurn]; 
 	int deckCount = G.deckCount[G.whoseTurn];
 	int playedCount= G.playedCardCount; 
+	int actions = G.numActions; 
 	int opp = (G.whoseTurn+1)%2; 
 	int oppHandCount = G.handCount[opp]; 
 	int oppDeckCount = G.deckCount[opp] ; 
 	int oppDiscardCount = G.discardCount[opp]; 
+	int playerDiscardCount = G.discardCount[player]; 
 	int supplyCounts[treasure_map+1]; 
 	for(ii=0; ii < treasure_map+1; ii++){
 		supplyCounts[ii] = G.supplyCount[ii]; 
 	}
         playCard(0, -1, -1, -1, &G);
-	//Check if 3 cards were added to hand and smithy was discarded
-	if(!assertFxn(handCount+2, G.handCount[G.whoseTurn])){ 
+	//Check if 1 card was added to hand and 1 was discarded
+	if(!assertFxn(handCount, G.handCount[G.whoseTurn])){ 
 		allPassed = 0; 
 		addedCards = G.handCount[G.whoseTurn] - handCount; 
-		printf("%i cards were added to the players hand instead of net 2 by Smithy card fxn.\n",addedCards); 
+		printf("%i cards were added to the players hand instead of net 0 by village card fxn.\n",addedCards); 
+	}
+	if(!assertFxn(playerDiscardCount+1, G.discardCount[player])){ 
+		allPassed = 0; 
+		printf("More or less than just the village card was discarded from the players hand. Expected = %i, actual = %i\n", playerDiscardCount+1, G.discardCount[player]); 
 	}
 	if(!assertFxn(playedCount+1, G.playedCardCount)){ 
 		allPassed = 0; 
-		printf("More or less than just the smithy card was discarded from the players hand. Expected = %i, actual = %i\n", playedCount+1, G.playedCardCount); 
+		printf("More or less than just the village card was played from the players hand. Expected = %i, actual = %i\n", playedCount+1, G.playedCardCount); 
 	}
-	//Check that 3 cards were removed from players deck and none from other players
-	if(!assertFxn(deckCount-3,G.deckCount[G.whoseTurn]) ){
+	//Check that 1 cards were removed from players deck and none from other players
+	if(!assertFxn(deckCount-1,G.deckCount[G.whoseTurn]) ){
 		allPassed = 0; 
-		printf("Players deck did not have exactly 3 cards removed by Smithy card fxn.\n"); 
+		printf("Players deck did not have exactly 1 card removed by village card.\n"); 
 	}
 	if(!assertFxn(oppDeckCount, G.deckCount[(G.whoseTurn+1)%2] )){
 		allPassed = 0; 
-		printf("Other players deck was altered by Smithy card fxn.\n"); 
+		printf("Other players deck was altered by village card fxn.\n"); 
 	}
+	//Check that 2 actions are added to state
+	if(!assertFxn(actions+1, G.numActions )){
+		allPassed = 0; 
+		printf("2 Actions were not added to the game state by village card.\n"); 
+	}
+	
 	//Check for no state change in other players. 
 	if(!assertFxn(oppHandCount, G.handCount[opp] )){
 		allPassed = 0; 
-		printf("Other players hand was altered by Smithy card fxn.\n"); 
+		printf("Other players hand was altered by village card fxn.\n"); 
 	}
 	if(!assertFxn(oppDiscardCount, G.discardCount[opp] )){
 		allPassed = 0; 
-		printf("Other players discard pile was altered by Smithy card fxn.\n"); 
+		printf("Other players discard pile was altered by village card fxn.\n"); 
 	}
 	//Check for no state change in victory card piles and kingdom card piles
 	for(ii=0; ii < treasure_map+1; ii++){
 	if(!assertFxn(supplyCounts[ii], G.supplyCount[ii] )){
 		allPassed = 0; 
-		printf("Supply count %i was altered by Smithy card fxn.\n", ii); 
+		printf("Supply count %i was altered by village card fxn.\n", ii); 
 	}
 	}
-	char fxnName[] = {"Smithy Card"};
+	char fxnName[] = {"village Card"};
 	passFail(allPassed, fxnName); 
-
 	printf("\n"); 
+
 }
 
-/*int smithyFxn(int handPos, int currentPlayer, struct gameState *state) {
-	//+3 Cards
-      int i=0; 
-      for (i = 0; i <= 3; i++) //Assignment 2 BUG, should be < 3; 
-	{
-	  drawCard(currentPlayer, state);
-	}
+/*   case village:
+      //+1 Card
+      drawCard(currentPlayer, state);
 			
-      //discard card from hand
+      //+2 Actions
+      state->numActions = state->numActions + 2;
+			
+      //discard played card from hand
       discardCard(handPos, currentPlayer, state, 0);
       return 0;
-}
+		
+	
 struct gameState {
   int numPlayers; //number of players
   int supplyCount[treasure_map+1];  //this is the amount of a specific type of card given a specific number.

@@ -34,6 +34,7 @@ int allPassed = 1;
 
 	char fxnName[] = {"numHandCards"};
 	passFail(allPassed, fxnName); 
+	printf("\n"); 
 }
 /*
 struct gameState {

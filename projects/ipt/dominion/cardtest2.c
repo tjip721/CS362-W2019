@@ -46,7 +46,7 @@ int main(){
 	}
 	if(!assertFxn(playedCount+1, G.playedCardCount)){ 
 		allPassed = 0; 
-		printf("More or less than just the Adventurer card was discarded from the players hand. Expected = %i, actual = %i\n", playedCount+1, G.playedCardCount); 
+		printf("More or less than just the Adventurer card was played from the players hand. Expected = %i, actual = %i\n", playedCount+1, G.playedCardCount); 
 	}
 	//Check that at least 2 cards were removed from players deck and none from other players
 	if(deckCount-2 <= G.deckCount[G.whoseTurn] ){
@@ -76,6 +76,7 @@ int main(){
 	char fxnName[] = {"Adventurer Card"};
 	passFail(allPassed, fxnName); 
 
+	printf("\n"); 
 }
 
 /*int adventurerFxn(struct gameState *state, int currentPlayer){
