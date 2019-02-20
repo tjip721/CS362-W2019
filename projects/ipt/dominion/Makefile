@@ -32,11 +32,19 @@ runtests: testDrawCard
 unittestFxn.o: unittestFxn.c unittestFxn.h
 	gcc -c unittestFxn.c -g $(CFLAGS) 
 
+randomtestcard1: randomtestcard1.c dominion.o rngs.o unittestFxn.o
+	gcc -o randomtestcard1 -g randomtestcard1.c dominion.o rngs.o unittestFxn.o $(CFLAGS)
+
+randomtestcard2: randomtestcard2.c dominion.o rngs.o unittestFxn.o
+	gcc -o randomtestcard2 -g randomtestcard2.c dominion.o rngs.o unittestFxn.o $(CFLAGS)
+
 randomtestadventurer: randomtestadventurer.c dominion.o rngs.o unittestFxn.o
 	gcc -o randomtestadventurer -g randomtestadventurer.c dominion.o rngs.o unittestFxn.o $(CFLAGS)
 
-randomTests: randomtestadventurer 
+randomTests: randomtestadventurer randomtestcard1 randomtestcard2
 	./randomtestadventurer &> randomtest.out
+	./randomtestcard1 >> randomtest.out
+	./randomtestcard2 >> randomtest.out
 	gcov dominion.c >> randomtest.out
 	cat dominion.c.gcov >> randomtest.out
 
