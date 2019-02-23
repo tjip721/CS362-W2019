@@ -48,6 +48,7 @@ int main(argv, argc){
 		discardCount = G.discardCount[G.whoseTurn];
 		int playedCount= G.playedCardCount; 
 		int player = G.whoseTurn; 
+		int numActions = G.numActions; 
 		for(ii=0; ii < numPlayers; ii++){
 			if(ii != currentPlayer){
 				oppHandCount[ii] = G.handCount[ii]; 
@@ -82,6 +83,12 @@ int main(argv, argc){
 			allPassed = 0; 
 			printf("Players deck did not have exactly 1 card removed by village card.\n"); 
 		}	
+		//Check that 1 action is added for the player's turn
+		if(!assertFxn(numActions+1,G.numActions) ){
+			allPassed = 0; 
+			printf("Players number of actions did not increase by 1. Expected %i, actual %i\n", numActions+1, G.numActions); 
+		}	
+
 		//Check for no state change in other players. 
 		for(ii=1; ii < numPlayers; ii++){
 			if(ii != currentPlayer){

@@ -79,7 +79,7 @@ int main(argv, argc){
 		//Check that at least 2 cards were removed from players deck 
 		if(deckCount-2 <= G.deckCount[G.whoseTurn] ){
 			allPassed = 0; 
-			printf("Players deck did not have at least 2 cards removed by Adventurer card fxn.\n"); 
+			printf("Players deck did not have at least 2 cards removed by Adventurer card fxn. Expected %i, actual %i.\n", deckCount-2, G.deckCount[G.whoseTurn]); 
 		}
 
 		//Check for no state change in other players. 

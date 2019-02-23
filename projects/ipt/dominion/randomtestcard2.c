@@ -39,7 +39,7 @@ int main(argv, argc){
 		}
 		G.deckCount[currentPlayer] = rand() % MAX_DECK; 
 		int cardPosition = rand() % (G.handCount[currentPlayer]); 
-		G.hand[currentPlayer][cardPosition] = adventurer; //insert adventurer at cardPosition
+		G.hand[currentPlayer][cardPosition] = outpost; //insert adventurer at cardPosition
 		G.whoseTurn = currentPlayer; 
 
 		//Remember states before playing card
