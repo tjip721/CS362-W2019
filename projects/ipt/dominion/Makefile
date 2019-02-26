@@ -45,7 +45,7 @@ randomTests: randomtestadventurer randomtestcard1 randomtestcard2
 	./randomtestadventurer &> randomtest.out
 	./randomtestcard1 >> randomtest.out
 	./randomtestcard2 >> randomtest.out
-	gcov dominion.c >> randomtest.out
+	gcov -b dominion.c >> randomtest.out
 	cat dominion.c.gcov >> randomtest.out
 
 player: player.c interface.o
