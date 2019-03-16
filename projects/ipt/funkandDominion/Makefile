@@ -41,6 +41,28 @@ randomtestcard2: randomtestcard2.c dominion.o rngs.o unittestFxn.o
 randomtestadventurer: randomtestadventurer.c dominion.o rngs.o unittestFxn.o
 	gcc -o randomtestadventurer -g randomtestadventurer.c dominion.o rngs.o unittestFxn.o $(CFLAGS)
 
+unittest1: unittest1.c dominion.o rngs.o unittestFxn.o
+	gcc -o unittest1 unittest1.c -g dominion.o rngs.o unittestFxn.o $(CFLAGS) 
+
+unittest2: unittest2.c dominion.o rngs.o unittestFxn.o
+	gcc -o unittest2 unittest2.c -g dominion.o rngs.o unittestFxn.o $(CFLAGS) 
+
+unittest3: unittest3.c dominion.o rngs.o unittestFxn.o
+	gcc -o unittest3 unittest3.c -g dominion.o rngs.o unittestFxn.o $(CFLAGS) 
+
+unittest4: unittest4.c dominion.o rngs.o unittestFxn.o
+	gcc -o unittest4 unittest4.c -g dominion.o rngs.o unittestFxn.o $(CFLAGS) 
+
+
+unittestresults: unittest1 unittest2 unittest3 unittest4 
+	./unittest1 &> unittestresult.out
+	./unittest2 >> unittestresult.out
+	./unittest3 >> unittestresult.out
+	./unittest4 >> unittestresult.out
+	gcov dominion.c >> unittestresult.out
+	cat dominion.c.gcov >> unittestresult.out
+
+
 randomTests: randomtestadventurer randomtestcard1 randomtestcard2
 	./randomtestadventurer &> randomtest.out
 	./randomtestcard1 >> randomtest.out

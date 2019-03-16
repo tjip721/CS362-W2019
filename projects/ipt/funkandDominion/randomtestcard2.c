@@ -69,15 +69,11 @@ int main(argv, argc){
 		int addedCards = G.outpostPlayed - outposts; 
 		printf("%i were added to the outposts played 1 by the outpost card.\n",addedCards); 
 	}
-	if(!assertFxn(discardCount, G.discardCount[player])){ 
+	if(!assertFxn(playedCount+1, G.playedCardCount)){ 
 		allPassed = 0; 
-		printf("More or less than just the outpost card was discarded from the players hand. Expected = %i, actual = %i\n", discardCount, G.discardCount[player]); 
+		printf("More or less than just the outpost card was played from the players hand. Expected = %i, actual = %i\n", playedCount+1, G.playedCardCount); 
 	}
 	
-	if(!assertFxn(oppDeckCount, G.deckCount[(G.whoseTurn+1)%2] )){
-		allPassed = 0; 
-		printf("Other players deck was altered by outpost card fxn.\n"); 
-	}
 	//Check for no state change in other players. 
 	//Check for no state change in other players. 
 		for(ii=1; ii < numPlayers; ii++){

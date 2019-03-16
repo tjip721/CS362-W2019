@@ -69,9 +69,9 @@ int main(argv, argc){
 			addedCards = G.handCount[G.whoseTurn] - handCount; 
 			printf("%i cards were added to the players hand instead of net 0 (1 add, 1 discard) by village card fxn.\n",addedCards); 
 		}
-		if(!assertFxn(discardCount+1, G.discardCount[player])){ 
+		if(!assertFxn(playedCount+1, G.playedCardCount)){ 
 			allPassed = 0; 
-			printf("More or less than just the village card was discarded from the players hand. Expected = %i, actual = %i\n", discardCount+1, G.discardCount[player]); 
+			printf("More or less than just the village card was played from the players hand. Expected = %i, actual = %i\n", discardCount+1, G.discardCount[player]); 
 		}
 		if(!assertFxn(playedCount+1, G.playedCardCount)){ 
 			allPassed = 0; 
